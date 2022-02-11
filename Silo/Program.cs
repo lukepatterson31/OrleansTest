@@ -1,4 +1,5 @@
-﻿using Grains;
+﻿using System.Net;
+using Grains;
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
@@ -43,6 +44,8 @@ namespace OrleansTest
                     options.ClusterId = "dev";
                     options.ServiceId = "OrleansTest";
                 })
+                .Configure<EndpointOptions>(options => 
+                    options.AdvertisedIPAddress = IPAddress.Loopback)
                 .ConfigureApplicationParts(parts =>
                     parts.AddApplicationPart(typeof(HelloGrain).Assembly).WithReferences())
                 .ConfigureLogging(logging => logging.AddConsole());

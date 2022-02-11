@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
-using System;
-using System.Threading.Tasks;
 using GrainInterfaces;
 
 namespace OrleansTest
@@ -41,7 +39,8 @@ namespace OrleansTest
         {
             IClusterClient client;
             client = new ClientBuilder()
-                .UseLocalhostClustering().Configure<ClusterOptions>(options =>
+                .UseLocalhostClustering()
+                .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "dev";
                     options.ServiceId = "OrleansTest";

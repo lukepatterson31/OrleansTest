@@ -8,6 +8,11 @@
         <RootNamespace>OrleansTest</RootNamespace>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <ConcurrentGarbageCollection>true</ConcurrentGarbageCollection>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\GrainInterfaces\GrainInterfaces.csproj" />
       <ProjectReference Include="..\Grains\Grains.csproj" />
