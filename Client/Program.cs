@@ -17,7 +17,7 @@ namespace OrleansTest
             try
             {
                 using (var client = await ConnectClient())
-                {
+                { 
                     await DoClientWork(client);
                     Console.ReadKey();
                 }
@@ -56,6 +56,10 @@ namespace OrleansTest
 
         private static async Task DoClientWork(IClusterClient client)
         {
+            var honeybadger = client.GetGrain<IHoneybadger>(1);
+            var commandResult = await honeybadger.FlipFlag("flagpath");
+            Console.Write($"Honeybadger: returned {commandResult} exited with code: {commandResult.ExitCode}");
+            
             var friend = client.GetGrain<IHello>(0);
             var response = await friend.SayHello("Good morning, HelloGrain!");
             Console.WriteLine($"\n\n{response}\n\n");

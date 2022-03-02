@@ -6,16 +6,16 @@ namespace Grains
 {
     public class HelloGrain : Orleans.Grain, IHello
     {
-        private readonly ILogger logger;
+        private readonly ILogger _logger;
 
         public HelloGrain(ILogger<HelloGrain> logger)
         {
-            this.logger = logger;
+            _logger = logger;
         }
         
         Task<string> IHello.SayHello(string greeting)
         {
-            logger.LogInformation($"\n Say hello message received: greeting = '{greeting}'");
+            _logger.LogInformation($"\n Say hello message received: greeting = '{greeting}'");
             return Task.FromResult($"\n Client said: {greeting}, so HelloGrain says: Hello!");
         }
     }
