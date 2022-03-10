@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using CliWrap;
 using CliWrap.Buffered;
 using GrainInterfaces;
 using Microsoft.Extensions.Logging;
+using Orleans;
 
 namespace Grains
 {
@@ -15,14 +18,21 @@ namespace Grains
             _logger = logger;
         }
 
-        async Task<CommandResult> IHoneybadger.FlipFlag(string flagPath)
+        async Task<string> IHoneybadger.FlipFlag(string flagPath, GrainCancellationToken gct)
         {
-            _logger.LogInformation("executing command!");
-            var result = await Cli.Wrap("aws")
-                .WithArguments($"ssm get-parameters --names {flagPath}")
-                .ExecuteBufferedAsync();
-            _logger.LogInformation("Honeybadger Parameters: {Returnedparameters}", result.StandardOutput);
-            return result;
+            string returnedParams = string.Empty;
+            if (!gct.CancellationToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("executing command!");
+                
+                var cmdResult = await Cli.Wrap("aws")
+                    .WithArguments($"ssm get-parameters --names {flagPath}")
+                    .ExecuteBufferedAsync(gct.CancellationToken);
+
+                returnedParams = cmdResult.StandardOutput;
+                _logger.LogInformation("Honeybadger Parameters: {Returnedparameters}", returnedParams);
+            }
+            return returnedParams;
         }
     }
 }
